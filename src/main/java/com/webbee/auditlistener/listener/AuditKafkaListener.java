@@ -1,4 +1,4 @@
-package com.webbee.auditlistener;
+package com.webbee.auditlistener.listener;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +20,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Kafka listener для обработки событий аудита и HTTP-запросов.
+ * @author Evseeva Tsvetolina
+ */
 @Component
 public class AuditKafkaListener {
 

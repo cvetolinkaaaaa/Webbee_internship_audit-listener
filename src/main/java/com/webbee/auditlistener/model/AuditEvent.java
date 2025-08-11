@@ -12,6 +12,10 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * Сущность для представления событий аудита в системе.
+ * @author Evseeva Tsvetolina
+ */
 @Entity
 @Table(name = "audit_events")
 @Data

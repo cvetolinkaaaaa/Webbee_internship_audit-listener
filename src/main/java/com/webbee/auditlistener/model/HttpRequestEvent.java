@@ -14,6 +14,10 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * Сущность для представления событий HTTP-запросов в системе аудита.
+ * @author Evseeva Tsvetolina
+ */
 @Entity
 @Table(name = "http_request_events")
 @Data

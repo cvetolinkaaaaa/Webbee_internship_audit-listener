@@ -20,6 +20,10 @@ import org.springframework.kafka.transaction.KafkaTransactionManager;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Конфигурация класс для настройки Apache Kafka.
+ * @author Evseeva Tsvetolina
+ */
 @Configuration
 @EnableKafka
 public class KafkaConfig {
@@ -33,6 +37,9 @@ public class KafkaConfig {
     @Value("${kafka.consumer.transaction-id-prefix}")
     private String transactionIdPrefix;
 
+    /**
+     * Создает фабрику consumer'ов с настройками для exactly-once семантики.
+     */
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -51,6 +58,9 @@ public class KafkaConfig {
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
+    /**
+     * Создает фабрику producer'ов с поддержкой идемпотентности и транзакций.
+     */
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -66,11 +76,17 @@ public class KafkaConfig {
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
+    /**
+     * Создает менеджер транзакций для Kafka.
+     */
     @Bean("kafkaTransactionManager")
     public KafkaTransactionManager kafkaTransactionManager() {
         return new KafkaTransactionManager(producerFactory());
     }
 
+    /**
+     * Создает фабрику контейнеров listener'ов с ручным подтверждением сообщений.
+     */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
@@ -82,6 +98,9 @@ public class KafkaConfig {
         return factory;
     }
 
+    /**
+     * Создает шаблон для отправки сообщений в Kafka.
+     */
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());

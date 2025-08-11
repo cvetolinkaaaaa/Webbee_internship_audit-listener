@@ -9,10 +9,17 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import jakarta.persistence.EntityManagerFactory;
 
+/**
+ * Конфигурация для настройки управления транзакциями.
+ * @author Evseeva Tsvetolina
+ */
 @Configuration
 @EnableTransactionManagement
 public class TransactionConfig {
 
+    /**
+     * Создает менеджера транзакций для JPA операций.
+     */
     @Bean("transactionManager")
     @Primary
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {

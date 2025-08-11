@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Сервис для управления событиями аудита.
+ * @author Evseeva Tsvetolina
+ */
 @Service
 @Transactional("transactionManager")
 public class AuditEventService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuditEventService.class);
 
     private final HttpRequestEventRepository httpRequestEventRepository;
     private final AuditEventRepository auditEventRepository;
