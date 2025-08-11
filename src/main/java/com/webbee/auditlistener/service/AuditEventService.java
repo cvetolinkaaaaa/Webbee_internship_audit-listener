@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional("transactionManager")
 public class AuditEventService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuditEventService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuditEventService.class);
 
     private final HttpRequestEventRepository httpRequestEventRepository;
     private final AuditEventRepository auditEventRepository;
@@ -29,16 +29,11 @@ public class AuditEventService {
     }
 
     public HttpRequestEvent saveHttpRequestEvent(HttpRequestEvent event) {
-        logger.debug("Сохранение HTTP события: {}", event.getCorrelationId());
         return httpRequestEventRepository.save(event);
     }
 
     public AuditEvent saveAuditEvent(AuditEvent event) {
-        logger.debug("Сохранение Audit события: {}", event.getCorrelationId());
-        
-        logger.debug("Arguments: {}", event.getArguments());
-        logger.debug("Result: {}", event.getResult());
-        
         return auditEventRepository.save(event);
     }
+
 }

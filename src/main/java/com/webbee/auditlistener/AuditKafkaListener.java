@@ -23,11 +23,11 @@ import java.util.List;
 @Component
 public class AuditKafkaListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuditKafkaListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuditKafkaListener.class);
 
     private final AuditEventService auditEventService;
     private final ObjectMapper objectMapper;
-    
+
     private final List<DateTimeFormatter> timestampFormatters = Arrays.asList(
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"),
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),
@@ -53,19 +53,13 @@ public class AuditKafkaListener {
             Acknowledgment acknowledgment) {
 
         try {
-            logger.info("Получено HTTP событие из топика: {}, partition: {}, offset: {}", topic, partition, offset);
-            logger.debug("HTTP событие содержимое: {}", message);
-            
+            LOGGER.info("Получено HTTP событие из топика: {}, partition: {}, offset: {}", topic, partition, offset);
+
             HttpRequestEvent event = objectMapper.readValue(message, HttpRequestEvent.class);
             auditEventService.saveHttpRequestEvent(event);
-            
             acknowledgment.acknowledge();
-            
-            logger.info("HTTP событие успешно сохранено с ID: {}", event.getId());
-            
+            LOGGER.info("HTTP событие успешно сохранено с ID: {}", event.getId());
         } catch (Exception e) {
-            logger.error("Ошибка при обработке HTTP события: {}", e.getMessage(), e);
-            logger.debug("Проблемное сообщение: {}", message);
             throw new RuntimeException("Не удалось обработать HTTP событие", e);
         }
     }
@@ -84,19 +78,12 @@ public class AuditKafkaListener {
             Acknowledgment acknowledgment) {
 
         try {
-            logger.info("Получено Audit событие из топика: {}, partition: {}, offset: {}", topic, partition, offset);
-            logger.debug("Audit событие содержимое: {}", message);
-            
+            LOGGER.info("Получено Audit событие из топика: {}, partition: {}, offset: {}", topic, partition, offset);
             AuditEvent event = parseAuditEvent(message);
             auditEventService.saveAuditEvent(event);
-            
             acknowledgment.acknowledge();
-            
-            logger.info("Audit событие успешно сохранено с ID: {}", event.getId());
-            
+            LOGGER.info("Audit событие успешно сохранено с ID: {}", event.getId());
         } catch (Exception e) {
-            logger.error("Ошибка при обработке Audit события: {}", e.getMessage(), e);
-            logger.debug("Проблемное сообщение: {}", message);
             throw new RuntimeException("Не удалось обработать Audit событие", e);
         }
     }
@@ -148,20 +135,16 @@ public class AuditKafkaListener {
     }
 
     private LocalDateTime parseTimestamp(String timestampStr) {
-        logger.debug("Парсинг timestamp: {}", timestampStr);
-        
+
         for (DateTimeFormatter formatter : timestampFormatters) {
             try {
                 LocalDateTime result = LocalDateTime.parse(timestampStr, formatter);
-                logger.debug("Успешно распарсен timestamp с форматом: {}", formatter);
                 return result;
             } catch (Exception e) {
-                logger.debug("Не удалось распарсить timestamp '{}' с форматом '{}': {}", 
-                    timestampStr, formatter, e.getMessage());
+                throw new RuntimeException("Ошибка парсинга");
             }
         }
-        
-        logger.warn("Не удалось распарсить timestamp '{}', используем текущее время", timestampStr);
         return LocalDateTime.now();
     }
+
 }
