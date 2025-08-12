@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: audit-system
+      comment: Создание таблицы для хранения HTTP событий
+      changes:
+        - createTable:
+            tableName: http_request_events
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: timestamp
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: request_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: method
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status_code
+                  type: INTEGER
+                  constraints:
+                    nullable: true
+              - column:
+                  name: url
+                  type: VARCHAR(2000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: request_body
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: response_body
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: correlation_id
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: execution_time
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: user_agent
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: remote_address
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropTable:
+            tableName: http_request_events
